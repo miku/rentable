@@ -1,0 +1,23 @@
+{
+    "name": "miku/rentable",
+    "license": "MIT",
+    "description": "Coding Contest #5 submission (http://www.coding-contest.de/)",
+    "authors": [
+        {
+            "name": "Martin Czygan",
+            "email": "martin.czygan@gmail.com",
+            "homepage": "http://twitter.com/cvvfj",
+            "role": "The Brain"
+        }
+    ],
+    "require": {
+        "devster/ubench": "1.1.*-dev",
+        "gabordemooij/redbean": "dev-master",
+        "lusitanian/oauth": "dev-master",
+        "monolog/monolog": "1.5.*@dev",
+        "php": ">=5.3.0",
+        "slim/slim": "2.*",
+        "twig/extensions": "1.*",
+        "twig/twig": "1.*"
+    }
+}

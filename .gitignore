@@ -1,0 +1,8 @@
+assets/foundation*
+assets/OpenLayers*
+assets/Toast*
+vendor/
+composer.phar
+composer.lock
+*p12
+logs/*
