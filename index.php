@@ -54,6 +54,30 @@
     });
     $env->addFunction($fn);
 
+    function getCityForZipcode($zipcode, $country = "DE") {
+        $url = "http://api.geonames.org/postalCodeLookupJSON?postalcode=" . $zipcode . "&country=" . $country . "&username=cc5geo1";
+        $cache_file = 'cache/' . sha1($url);
+        if (!file_exists($cache_file)) {
+            $ch = curl_init();
+            // Set query data here with the URL
+            curl_setopt($ch, CURLOPT_URL, $url); 
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $content = trim(curl_exec($ch));
+            curl_close($ch);
+            $result = json_decode($content, true);
+            if (array_key_exists("postalcodes", $result)) {
+                if (count($result["postalcodes"]) > 0) {
+                    file_put_contents($cache_file, $result["postalcodes"][0]["placeName"]);
+                }
+            }              
+        }
+        if (file_exists($cache_file)) {
+            return file_get_contents($cache_file);    
+        } else {
+            return "...";
+        }
+    }
+
     // routes 
     $app->get('/', function() use ($app) {
         $log = $app->getLog();
@@ -151,6 +175,33 @@
         }
         $app->redirect($app->urlFor('index'));
     })->name('sync');
+
+    $app->get('/geojson', function() use ($app, $env) {
+        $log = $app->getLog();
+        $rentables = R::getAll('select * from rentable');
+        $result = array();
+        foreach ($rentables as $rentable) {
+            $item = array();
+            $item["type"] = "Feature";
+            $item["properties"] = array();
+            $item["properties"]["description"] = $rentable["description"];
+            $item["properties"]["zipcode"] = $rentable["zipcode"];
+            $item["properties"]["street"] = $rentable["street"];
+            $item["properties"]["styled"] = $env->render('marker.html', 
+                array("description" => $rentable["description"], 
+                    "zipcode" => $rentable["zipcode"],
+                    "city" => getCityForZipcode($rentable["zipcode"]),
+                    "street" => $rentable["street"]));
+            $log->debug($item["properties"]["styled"]);
+            $item["geometry"] = array();
+            $item["geometry"]["type"] = "Point";
+            $item["geometry"]["coordinates"] = array($rentable["latitude"], $rentable["longitude"]);
+            array_push($result, $item);
+        }
+        header("Content-Type: application/json");
+        echo json_encode($result);
+        exit;        
+    })->name("geojson");
 
     $app->get('/locations', function() use ($app) {
         $log = $app->getLog();

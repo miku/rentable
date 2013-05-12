@@ -45,7 +45,7 @@ div#footer {
 }
 
 div#map {
-    height: 400px;
+    height: 300px;
 }
 
 /* Map customizations */
@@ -61,4 +61,7 @@ div#map {
 .olControlAttribution > a {
     color: white !important;
     text-decoration: none !important;
+}
+
+.rentable-marker {
 }
