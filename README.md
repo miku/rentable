@@ -15,7 +15,7 @@ INSTALL
 
 Clone the repo:
 
-    $ git@github.com:miku/rentable.git
+    $ git clone git@github.com:miku/rentable.git
     $ cd rentable
 
 To bootstrap PHP dependencies (using composer):
