@@ -1,4 +1,3 @@
-assets/Toast*
 vendor/*
 cache/*
 composer.phar
@@ -7,3 +6,4 @@ components/*
 db/*
 *p12
 logs/*
+/composer install

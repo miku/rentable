@@ -3,7 +3,7 @@
     |__/ |___ |\ |  |  |__| |__] |    |___ 
     |  \ |___ | \|  |  |  | |__] |___ |___ 
 
-is the CC5 (Coding Contest #5) submission for PHP category by Martin Czygan.
+is the CC5 ([Coding Contest #5](http://www.coding-contest.de/)) submission for PHP category by Martin Czygan.
 
 * Google Docs Key: `0AhlhQsr_yVQ4dFFOTVEtX3hKU0Q2azcyczNUckNybVE`
 * Google Docs Document: https://docs.google.com/spreadsheet/ccc?key=0AhlhQsr_yVQ4dFFOTVEtX3hKU0Q2azcyczNUckNybVE#gid=0
@@ -16,7 +16,7 @@ INSTALL
 To bootstrap PHP dependencies (using composer):
 
     $ curl -sS https://getcomposer.org/installer | php
-    $ ./composer install
+    $ ./composer.phar install
 
 To download the JS dependencies (with bower - https://github.com/bower/bower):
 
