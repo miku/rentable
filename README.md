@@ -1,7 +1,7 @@
 
-____ ____ _  _ ___ ____ ___  _    ____ 
-|__/ |___ |\ |  |  |__| |__] |    |___ 
-|  \ |___ | \|  |  |  | |__] |___ |___ 
+    ____ ____ _  _ ___ ____ ___  _    ____ 
+    |__/ |___ |\ |  |  |__| |__] |    |___ 
+    |  \ |___ | \|  |  |  | |__] |___ |___ 
 
 is the CC5 (Coding Contest #5) submission for PHP category by Martin Czygan.
 
@@ -20,16 +20,16 @@ To bootstrap PHP dependencies (using composer):
 
 To download the JS dependencies (with bower - https://github.com/bower/bower):
 
-	$ bower install jquery modernizr knockout
+    $ bower install jquery modernizr knockout
 
 Allow apache to write to the cache, logs and the database (sqlite3):
 
-	$ mkdir -p logs cache db
-	$ chmod 777 logs cache db
+    $ mkdir -p logs cache db
+    $ chmod 777 logs cache db
 
 On Mac OS X you can link to your webservers document root like this:
 
-	$ ln -s `pwd` /Library/WebServer/Documents/
+    $ ln -s `pwd` /Library/WebServer/Documents/
 
 Then you can access the site on http://localhost/rentable/.
 
