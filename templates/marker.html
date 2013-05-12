@@ -1,3 +1,9 @@
+<div class="description">
 <h3>{{ description }}</h3>
 in {{ zipcode }} {{ city }}<br>
-{{ street }}
+{{ street }}<br>
+</div>
+Available today: {{ available_today|raw }}<br>
+Available tomorrow: {{ available_tomorrow|raw }}<br>
+Available next 10 days: {{available_next_10_days|raw }}<br>
+See <a href="{{ google_docs_url }}">all reservations on Google Docs</a>

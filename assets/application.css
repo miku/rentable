@@ -10,6 +10,7 @@ a {
 
 h1 {
     font-family: 'Lobster', cursive;
+    margin-top: 10px;
 }
 
 table {
@@ -28,7 +29,23 @@ tr:hover {
     background: #fff380;
 }
 
+p {
+    margin-bottom: 10px;
+}
+
+input[type=text] {
+    width: 100%;
+    font-size: 0.8em;
+    padding: 4px;
+}
+
 /* Custom divs */
+
+div#search {
+    background: #f1f1f1;
+    padding: 10px;
+}
+
 div.container {
     background: white;
 }
@@ -44,9 +61,34 @@ div#footer {
     font-size: 0.5em;
 }
 
-div#map {
-    height: 300px;
+div.description {
+    border-bottom: solid #efefef 1px;
+    margin-bottom: 5px;
 }
+
+div#map {
+    height: 380px;
+}
+
+div#reservations {
+    font-size: 0.6em;
+}
+
+span.available-yes {
+    color: green;
+    font-weight: bold
+}
+
+span.available-no {
+    color: red;
+    font-weight: bold
+}
+
+span.available-maybe {
+    color: orange;
+    font-weight: bold    
+}
+
 
 /* Map customizations */
 .olControlAttribution {

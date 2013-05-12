@@ -31,6 +31,7 @@
         return !strncmp($haystack, $needle, strlen($needle));
     }
 
+    $twig = new Twig();
     // setup application
     $app = new Slim(array(
         'debug' => true,
@@ -41,7 +42,7 @@
             'path' => 'logs',
             'name_format' => 'Y-m-d'
         )),        
-        'view' => new Twig(),
+        'view' => $twig,
     ));
 
     // urlFor fix; usually this should be done with:
@@ -54,6 +55,10 @@
     });
     $env->addFunction($fn);
 
+    $escaper = new Twig_Extension_Escaper(true);
+    $env->addExtension($escaper);
+
+    // helper
     function getCityForZipcode($zipcode, $country = "DE") {
         $url = "http://api.geonames.org/postalCodeLookupJSON?postalcode=" . $zipcode . "&country=" . $country . "&username=cc5geo1";
         $cache_file = 'cache/' . sha1($url);
@@ -85,6 +90,57 @@
         $app->render('index.html');
     })->name('index');
 
+    $app->get('/reservations', function() use ($app) {
+        $log = $app->getLog();
+        $oid = $app->request()->get('oid');
+        $result = R::getAll('select * from reservation where oid = :oid', array(":oid" => $oid));
+        header("Content-Type: application/json");
+        echo json_encode($result);
+        exit;        
+    })->name("reservations");
+
+    // convert some string to latitude and longitude
+    $app->get('/tocoords', function() use ($app) {
+        $log = $app->getLog();
+        
+        $qs = $app->request()->get('q');
+        $parts = preg_split('/\s+/', $qs);
+        $qs = implode('+', $parts);
+        
+        $url = "http://api.geonames.org/searchJSON?q=" . $qs . "&maxRows=10&username=cc5geo1";
+        $log->debug("URL:" . $url);
+        $cache_file = 'cache/' . sha1($url);
+        if (!file_exists($cache_file)) {
+            $ch = curl_init();
+            // Set query data here with the URL
+            curl_setopt($ch, CURLOPT_URL, $url); 
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $content = trim(curl_exec($ch));
+            curl_close($ch);
+            file_put_contents($cache_file, $content);
+        }
+        $result = array();
+        if (file_exists($cache_file)) {
+            $content = json_decode(file_get_contents($cache_file), true);
+            if (array_key_exists("geonames", $content)) {
+                if (count($content["geonames"]) > 0) {
+                    $result["latitude"] = $content["geonames"][0]["lat"];
+                    $result["longitude"] = $content["geonames"][0]["lng"];
+                }
+            }
+        } 
+        header("Content-Type: application/json");
+        echo json_encode($result);
+        exit;        
+    })->name("tocoords");
+
+    $app->get('/count', function() use ($app) {
+        $rentables = R::getAll('select * from rentable');
+        header("Content-Type: application/json");
+        echo json_encode(array("count" => count($rentables)));
+        exit;                
+    })->name("count");
+
     $app->get('/sync', function () use ($app) {
         $log = $app->getLog();
 
@@ -94,6 +150,8 @@
         // download all worksheets
         for ($i = 0; $i < MAX_SHEETS; $i++) {
             $item = array();
+            $item['ccc'] = "https://spreadsheets.google.com/ccc?key=" . 
+                SPREADSHEET_KEY . "#gid=" . $i;
             $item['url'] = "https://spreadsheets.google.com/pub?key=" . 
                 SPREADSHEET_KEY . "&gid=" . $i . "&output=csv";
             $item['fgid'] = sprintf("%04d", $i);
@@ -135,6 +193,7 @@
         foreach ($descriptors as $item) {
             $rentable = R::dispense('rentable');
             $rentable->oid = $item['id'];
+            $rentable->ccc = $item['ccc'];
             // read CSV data into SQL
             if (($handle = fopen($item['target'], "r")) !== FALSE) {
                 while (($line = fgetcsv($handle)) !== FALSE) {
@@ -176,6 +235,7 @@
         $app->redirect($app->urlFor('index'));
     })->name('sync');
 
+
     $app->get('/geojson', function() use ($app, $env) {
         $log = $app->getLog();
         $rentables = R::getAll('select * from rentable');
@@ -185,13 +245,51 @@
             $item["type"] = "Feature";
             $item["properties"] = array();
             $item["properties"]["description"] = $rentable["description"];
+            $item["properties"]["oid"] = $rentable["oid"];
+
+            // date_parse_from_format("Y-m-d", $date)
+            $today = R::getAll('select * from reservation where oid = :oid and date = :date', 
+                array(":oid" => $rentable["oid"], "date" => date("Y-m-d")));
+            $available_today = (count($today) == 0 ? 'yes' : 'no');
+            $item["properties"]["available_today"] = "<span class='available-" . $available_today . "'>". $available_today . "</span>";
+
+            $tomorrow = R::getAll('select * from reservation where oid = :oid and date = :date', 
+                array(":oid" => $rentable["oid"], "date" => date('Y-m-d', strtotime(date("Y-m-d") . ' + 1 day'))));
+            $available_tomorrow = (count($tomorrow) == 0 ? 'yes' : 'no');
+            $item["properties"]["available_tomorrow"] = "<span class='available-" . $available_tomorrow . "'>". $available_tomorrow . "</span>";
+
+            // counters
+            $available_next_10_days = 0;
+            for ($i=1; $i < 11; $i++) { 
+
+                $rsv = R::getAll('select * from reservation where oid = :oid and date = :date', 
+                    array(":oid" => $rentable["oid"], "date" => date('Y-m-d', strtotime(date("Y-m-d") . ' + ' . $i . ' day'))));
+                if (count($rsv) == 0) {
+                    $available_next_10_days += 1;
+                }
+            }
+            if ($available_next_10_days == 0) {
+                $item["properties"]["available_next_10_days"] = "<span class='available-no'>no</span>";
+            } elseif ($available_next_10_days == 10) {
+                $item["properties"]["available_next_10_days"] = "<span class='available-yes'>yes</span>";
+            } else {
+                $item["properties"]["available_next_10_days"] = "<span class='available-maybe'>" . $available_next_10_days . "/10" . "</span>";
+            }
+
+            $log->debug(json_encode($item));
+
             $item["properties"]["zipcode"] = $rentable["zipcode"];
             $item["properties"]["street"] = $rentable["street"];
             $item["properties"]["styled"] = $env->render('marker.html', 
                 array("description" => $rentable["description"], 
                     "zipcode" => $rentable["zipcode"],
                     "city" => getCityForZipcode($rentable["zipcode"]),
-                    "street" => $rentable["street"]));
+                    "street" => $rentable["street"],
+                    "available_today" => $item["properties"]["available_today"],
+                    "available_tomorrow" => $item["properties"]["available_tomorrow"],
+                    "available_next_10_days" => $item["properties"]["available_next_10_days"],
+                    "google_docs_url" => $rentable["ccc"]
+                ));
             $log->debug($item["properties"]["styled"]);
             $item["geometry"] = array();
             $item["geometry"]["type"] = "Point";
@@ -202,34 +300,6 @@
         echo json_encode($result);
         exit;        
     })->name("geojson");
-
-    $app->get('/locations', function() use ($app) {
-        $log = $app->getLog();
-        // create OL locations file 
-        $rentables = R::getAll('select * from rentable');
-        // lat  lon title   description icon    iconSize    iconOffset
-        $handle = fopen('cache/locations.tsv', 'w');
-        fputcsv($handle, array('lat', 'lon', 'title', 'description', 'icon', 'iconSize', 'iconOffset'), chr(9));
-        foreach ($rentables as $rentable) {
-            $log->debug($rentable);
-            fputcsv($handle, array(
-                $rentable['longitude'],                
-                $rentable['latitude'], 
-                $rentable['description'], 
-                $rentable['zipcode'] . ' ' . $rentable['street'],
-                'assets/icons/villa.png',
-                '37,32',
-                '0,0'), chr(9));
-        }
-        fclose($handle);
-        chmod('cache/locations.tsv', 0777);
-        $response = $app->response();
-        $response->status(200);
-        $response->body(file_get_contents('cache/locations.tsv'));
-        $response['Content-Type'] = 'text/plain';
-        // $app->render('locations.tsv');
-    })->name('locations');
-    
 
     // start the app
     $app->run();

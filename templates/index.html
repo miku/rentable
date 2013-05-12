@@ -21,21 +21,57 @@
                     geojsonLayer = L.geoJson(response, {
                         onEachFeature: function (feature, layer) {
                             layer.bindPopup(feature.properties.styled, 
-                                { className: 'rentable-marker' });
+                                { className: 'rentable-marker', title: feature.properties.oid });
                         }
                     }).addTo(map);
                 }
-            });            
+            });
+
+            function ViewModel() {
+                var self = this;
+                self.query = ko.observable("");
+
+                self.query.subscribe(function(newValue) {
+                    console.log("query:" + newValue);
+                    console.log("{{ urlFor('tocoords') }}?q=" + newValue);
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ urlFor('tocoords') }}?q=" + newValue,
+                        dataType: 'json',
+                        success: function (response) {
+                            map.setView([response.latitude, response.longitude], 12);
+                        }
+                    });
+                });
+            }
+
+            var model = new ViewModel();
+            ko.applyBindings(model);
+
+            $("#q").focus(); 
+
+            $.ajax({
+                type: "GET",
+                url: "{{ urlFor('count') }}",
+                dataType: 'json',
+                success: function (response) {
+                    $("#count").html(response.count);
+                }
+            });
+
+
         });
     </script>
 {% endblock %}
 
 {% block main %}
     <div class="unit span-grid">
-        <p>
-            Rentable is your premium source for lending just about everyting. There are
-            currently {{ random(1000) }} items to lend, from houses to helicopters.
-        </p>
+        <p>Rentable is your premium source for lending just about everyting. Currently there are <span id="count"></span> items to rent.</p>
+        <div id="search">
+            <input type="text" data-bind="value: query" id="q" placeholder="Leipzig, Sachsen, Berlin, München, ..."></input>
+        </div>
+        <div id="reservations">
+        </div>
     </div>
     <div class="unit span-grid">
         <div id="map"></div>
