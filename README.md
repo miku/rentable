@@ -13,6 +13,11 @@ is the CC5 ([Coding Contest #5](http://www.coding-contest.de/)) submission for P
 INSTALL
 =======
 
+Clone the repo:
+
+    $ git@github.com:miku/rentable.git
+    $ cd rentable
+
 To bootstrap PHP dependencies (using composer):
 
     $ curl -sS https://getcomposer.org/installer | php
