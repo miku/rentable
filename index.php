@@ -34,10 +34,10 @@
     $twig = new Twig();
     // setup application
     $app = new Slim(array(
-        'debug' => true,
+        'debug' => false,
         'templates.path' => 'templates',
         'log.level' => 4,
-        'log.enabled' => true,
+        'log.enabled' => false,
         'log.writer' => new DateTimeFileWriter(array(
             'path' => 'logs',
             'name_format' => 'Y-m-d'
