@@ -18,7 +18,7 @@ To bootstrap PHP dependencies (using composer):
     $ curl -sS https://getcomposer.org/installer | php
     $ ./composer.phar install
 
-To download the JS dependencies (with bower - https://github.com/bower/bower):
+To download the JS dependencies (with [bower](https://github.com/bower/bower)):
 
     $ bower install jquery modernizr knockout
 
