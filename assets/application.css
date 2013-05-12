@@ -1,0 +1,64 @@
+html {
+    font-family: Verdana;
+    /* background: url(http://i.imgur.com/mBVCD0n.jpg); */
+    height: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-family: 'Lobster', cursive;
+}
+
+table {
+    font-size: 0.7em;
+}
+
+tr > td {
+    padding: 2px 14px 2px 14px;
+}
+
+tr {
+    border-bottom: dashed thin #ababab;
+}
+
+tr:hover {
+    background: #fff380;
+}
+
+/* Custom divs */
+div.container {
+    background: white;
+}
+
+span.secondary {
+    font-size: 0.8em;
+}
+
+div#footer {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: solid thin #ababab;
+    font-size: 0.5em;
+}
+
+div#map {
+    height: 400px;
+}
+
+/* Map customizations */
+.olControlAttribution {
+    bottom: 5px !important;
+    font-size: 0.5em !important;
+    background: #ababab !important;
+    padding: 0px 5px 0px 5px !important;
+    color: white !important;
+    opacity: 0.8 !important;
+}
+
+.olControlAttribution > a {
+    color: white !important;
+    text-decoration: none !important;
+}

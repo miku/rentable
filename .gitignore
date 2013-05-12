@@ -1,8 +1,11 @@
 assets/foundation*
 assets/OpenLayers*
 assets/Toast*
-vendor/
+vendor/*
+cache/*
 composer.phar
 composer.lock
+components/*
+db/*
 *p12
 logs/*
