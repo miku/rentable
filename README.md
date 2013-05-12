@@ -40,6 +40,8 @@ To create the database (sqlite3 in `db/rentable.db`), click on the link
 that says [Sync with Google now](http://localhost/rentable/sync). After
 that the objects should be in the database and should be visible on the map.
 
+If the spreadsheet has been updated, you must sync again to get the newest data.
+
 Navigating
 ==========
 
