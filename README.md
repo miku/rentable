@@ -68,8 +68,12 @@ Technology Stack
 
 * Slim PHP web framework
 * Redbean ORM
-* Leaflet Maps
-* Open Street Map data
+* [Leaflet Maps](http://leafletjs.com/), using GeoJSON
+* [Open Street Map data](http://www.openstreetmap.org/)
 * jQuery, Knockoutjs
 * Toast CSS Grid
 
+Background Image
+================
+
+* [Paris at Night](http://en.wikipedia.org/wiki/File:Paris_Night.jpg)
