@@ -42,6 +42,15 @@ that the objects should be in the database and should be visible on the map.
 
 If the spreadsheet has been updated, you must sync again to get the newest data.
 
+Note: To change the spreadsheet that is used by the application, edit `index.php`
+and set the following definition:
+
+    define('SPREADSHEET_KEY', '0AhlhQsr_yVQ4dFFOTVEtX3hKU0Q2azcyczNUckNybVE');
+
+to your spreadsheet key. Since Google's [*Automatically republish when changes are made*](http://productforums.google.com/forum/#!topic/docs/k_1cuE08t9Q)
+option does not seem to work, you might want to change this key in order
+to check that changes are synced correctly.
+
 Navigating
 ==========
 
