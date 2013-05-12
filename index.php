@@ -146,7 +146,6 @@
 
         // a list of descriptors for the objects
         $descriptors = array();
-
         // download all worksheets
         for ($i = 0; $i < MAX_SHEETS; $i++) {
             $item = array();
@@ -160,26 +159,27 @@
             $item['id'] = SPREADSHEET_KEY . '-' . $item['fgid'];
             $item['last-access'] = date("c", time());
 
-            if (!file_exists($item['target'])) {
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $item['url']);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
-                curl_setopt($ch, CURLOPT_FAILONERROR, 1);
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-                $serialized = curl_exec($ch);
+            // if (!file_exists($item['target'])) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $item['url']);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
+            curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            $serialized = curl_exec($ch);
 
-                // check the content type of the response, 
-                // whether we downloaded all worksheets
-                $content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-                if ($content_type != 'text/csv') {
-                    $log->debug('no text/csv reponse, stopping at ' . $i);
-                    break;
-                }  else {
-                    file_put_contents($item['target'], $serialized);
-                    chmod($item['target'], 0664);
-                    $log->debug($item['target'] . ' downloaded');
-                }
+            // check the content type of the response, 
+            // whether we downloaded all worksheets
+            $content_type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+            if ($content_type != 'text/csv') {
+                $log->debug('no text/csv reponse, stopping at ' . $i);
+                break;
+            }  else {
+                file_put_contents($item['target'], $serialized);
+                chmod($item['target'], 0664);
+                $log->debug($item['target'] . ' downloaded');
             }
+            // }
+                
             array_push($descriptors, $item);
         }
         // dump the descriptors
