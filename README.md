@@ -47,9 +47,10 @@ and set the following definition:
 
     define('SPREADSHEET_KEY', '0AhlhQsr_yVQ4dFFOTVEtX3hKU0Q2azcyczNUckNybVE');
 
-to your spreadsheet key. Since Google's [*Automatically republish when changes are made*](http://productforums.google.com/forum/#!topic/docs/k_1cuE08t9Q)
+to **your** spreadsheet key. Since Google's [*Automatically republish when changes are made*](http://productforums.google.com/forum/#!topic/docs/k_1cuE08t9Q)
 option does not seem to work, you might want to change this key in order
-to check that changes are synced correctly.
+to check that changes are synced correctly. The number of worksheets is
+*automatically* determined by the application (a limit of 1000 worksheets is enforced by the application).
 
 Navigating
 ==========
