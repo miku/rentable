@@ -7,7 +7,8 @@ is the CC5 (Coding Contest #5) submission for PHP category by Martin Czygan.
 
 * Google Docs Key: `0AhlhQsr_yVQ4dFFOTVEtX3hKU0Q2azcyczNUckNybVE`
 * Google Docs Document: https://docs.google.com/spreadsheet/ccc?key=0AhlhQsr_yVQ4dFFOTVEtX3hKU0Q2azcyczNUckNybVE#gid=0
-* Github Repository: 
+* Github Repository: https://github.com/miku/rentable
+* Screenshots: http://imgur.com/a/Ta067
 
 INSTALL
 =======
