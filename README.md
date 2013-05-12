@@ -31,7 +31,7 @@ On Mac OS X you can link to your webservers document root like this:
 
     $ ln -s `pwd` /Library/WebServer/Documents/
 
-Then you can access the site on http://localhost/rentable/.
+Then you can access the site on [http://localhost/rentable/](http://localhost/rentable/).
 
 Syncing with Google Docs
 ========================
