@@ -1,9 +1,8 @@
-
     ____ ____ _  _ ___ ____ ___  _    ____ 
     |__/ |___ |\ |  |  |__| |__] |    |___ 
     |  \ |___ | \|  |  |  | |__] |___ |___ 
 
-is the CC5 ([Coding Contest #5](http://www.coding-contest.de/)) submission for PHP category by Martin Czygan.
+is the CC5 ([Netresearch Coding Contest #5](http://www.coding-contest.de/)) submission for PHP category by Martin Czygan.
 
 * Google Docs Key: `0AhlhQsr_yVQ4dFFOTVEtX3hKU0Q2azcyczNUckNybVE`
 * Google Docs Document: https://docs.google.com/spreadsheet/ccc?key=0AhlhQsr_yVQ4dFFOTVEtX3hKU0Q2azcyczNUckNybVE#gid=0
