@@ -9,6 +9,8 @@ is the CC5 ([Netresearch Coding Contest #5](http://www.coding-contest.de/)) subm
 * Github Repository: https://github.com/miku/rentable
 * Screenshots: http://imgur.com/a/Ta067
 
+![http://i.imgur.com/K208Lwg.jpg](http://i.imgur.com/K208Lwg.jpg)
+
 INSTALL
 =======
 
