@@ -67,7 +67,7 @@ div.description {
 }
 
 div#map {
-    height: 380px;
+    height: 500px;
 }
 
 div#reservations {
@@ -86,7 +86,7 @@ span.available-no {
 
 span.available-maybe {
     color: orange;
-    font-weight: bold    
+    font-weight: bold
 }
 
 
